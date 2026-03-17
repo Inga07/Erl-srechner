@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Erlösrechner</title>
+    </head>
+    <body>
+
+        <script>
+            function fErloesrechner() {
+
+                var vStueckPreis;
+                var vKV;
+                var vKF;
+                var vProduktionsmenge;
+                var vErlös;
+                var vGewinn;
+                var vGesKosten;
+                var BEP;
+                var vGewinnschwelle;
+                var vAusgabe;
+
+                var vMenge = 0;
+                var vGesGewinn = 0.00;
+
+                vStueckPreis = parseFloat(document.getElementById("idPreis").value);
+                vProduktionsmenge = parseFloat(document.getElementById("idProduktionsmenge").value);
+                vKV = parseFloat(document.getElementById("idKV").value);
+                vKF = parseFloat(document.getElementById("idKF").value);
+
+                vAusgabe = "";
+                vAusgabe = "<table border=1>"
+                vAusgabe = "<tr><th>Menge</th><th>Kosten</th><th>Erlöse</th><th>Gewinn</th><th>Bemerkung</th></tr>";
+
+                while (vMenge <= vProduktionsmenge) {
+
+                    vGesKosten = vKV * vMenge + vKF;
+                    vErlös = vMenge * vStueckPreis;
+                    vGewinn = vErlös - vGesKosten;
+                    vGesGewinn = vGesGewinn + vGewinn;
+
+                    if (vGewinn < 0) {
+                       vAusgabe = vAusgabe + "<tr><td>" + vMenge + "</td><td>" + vGesKosten.toFixed(2) + " €</td><td>" + vErlös.toFixed(2) + " €</td><td style=color:red>" + vGesGewinn.toFixed(2) + " €</td><td>Verlustzone</td></tr>";
+                    }
+                    else if (vGewinn == 0) {
+                        vAusgabe = vAusgabe + "<tr style=background-color:green><td>" + vMenge + "</td><td>" + vGesKosten.toFixed(2) + " €</td><td>" + vErlös.toFixed(2) + " €</td><td>" + vGewinn.toFixed(2) + " €</td><td>Gewinnschwelle</td></tr>";
+                    }
+                    else {
+                        vAusgabe = vAusgabe + "<tr><td>" + vMenge + "</td><td>" + vGesKosten.toFixed(2) + " €</td><td>" + vErlös.toFixed(2) + " €</td><td>" + vGewinn.toFixed(2) + " €</td><td>Gewinnzone</td></tr>";
+                    }
+
+                    vMenge = vMenge + 100;
+
+                }
+
+                vBEP=vKF/(vStueckPreis-vKV);
+				
+				vBEP=Math.round(vBEP);
+				
+				vGewinnschwelle= vBEP*vStueckPreis;
+				
+				vAusgabe = vAusgabe + "Break-Even-Point: ";
+				
+				vAusgabe = vAusgabe + vBEP + " Stück </br>";
+				vAusgabe = vAusgabe + "---------------------------------------</br>"
+				vAusgabe = vAusgabe + "Gewinnschwelle: ";
+				
+				vAusgabe = vAusgabe + vGewinnschwelle.toFixed(2) + " € </br>";
+				vAusgabe = vAusgabe + "---------------------------------------</br>"
+                
+                vAusgabe = "</table>";
+
+                document.getElementById("idAusgabe").innerHTML=vAusgabe;
+
+
+
+            }
+        </script>
+		
+		<h1>Eisverkauf-Gelato</h1>
+		<p>Kosten-Variabel(k, pro Eiskugel): <input id="idKV" value="0.50" size="6"></p>
+		<p>Kosten-Fix: <input id="idKF" value="500.00" size="6"></p>
+		<p>Verkaufsmenge(x): <input id="idProduktionsmenge" value="1000" size="6"></p>
+		<p>Stückpreis(p): <input id="idPreis" value="1.50" size="6"></p>
+		<button onclick="fErloesrechner()">Kostentabelle!</button><br><br>
+        <div id="idAusgabe"></div>
+
+    </body>
+</html>
